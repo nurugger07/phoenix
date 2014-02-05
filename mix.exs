@@ -21,6 +21,7 @@ defmodule Phoenix.Mixfile do
       {:plug, github: "elixir-lang/plug"},
       {:inflex, github: "nurugger07/inflex"},
       {:ex_conf, github: "phoenixframework/ex_conf"}
+      {:calliope, github: "nurugger07/calliope"}
     ]
   end
 
