@@ -19,7 +19,8 @@ defmodule Phoenix.Mixfile do
     [
       {:cowboy, github: "extend/cowboy"},
       {:plug, github: "elixir-lang/plug"},
-      {:inflex, github: "nurugger07/inflex"}
+      {:inflex, github: "nurugger07/inflex"},
+      {:calliope, github: "nurugger07/calliope"}
     ]
   end
 end
