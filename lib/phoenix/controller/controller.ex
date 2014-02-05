@@ -1,9 +1,11 @@
 defmodule Phoenix.Controller do
   import Plug.Connection
+  import Calliope.Render
 
   defmacro __using__(_options) do
     quote do
       import Plug.Connection
+      import Calliope.Render
       import unquote(__MODULE__)
     end
   end
@@ -21,6 +23,10 @@ defmodule Phoenix.Controller do
   def text(conn, text), do: text(conn, 200, text)
   def text(conn, status, text) do
     send_response(conn, status, "text/plain", text)
+  end
+
+  def haml(conn, haml) do
+    html(conn, render(haml, conn)) 
   end
 
   def send_response(conn, status, content_type, data) do
