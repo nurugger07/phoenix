@@ -4,8 +4,8 @@ defmodule Phoenix.Mixfile do
   def project do
     [ app: :phoenix,
       version: "0.0.1",
-      elixir: "~> 0.12.1",
-      deps: deps ]
+      elixir: "~> 0.12.4",
+      deps: deps(Mix.env) ]
   end
 
   def application do
@@ -15,12 +15,17 @@ defmodule Phoenix.Mixfile do
     ]
   end
 
-  defp deps do
+  defp deps(:prod) do
     [
       {:cowboy, github: "extend/cowboy"},
       {:plug, github: "elixir-lang/plug"},
       {:inflex, github: "nurugger07/inflex"},
       {:calliope, github: "nurugger07/calliope"}
     ]
+  end
+
+  defp deps(_) do
+    deps(:prod) ++
+      [ { :ex_doc, github: "elixir-lang/ex_doc" } ]
   end
 end

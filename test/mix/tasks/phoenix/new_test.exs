@@ -15,7 +15,7 @@ defmodule Mix.Tasks.Phoenix.NewTest do
       "lib",
       "lib/photo_blog.ex",
       "lib/photo_blog/controllers/pages.ex",
-      "lib/photo_blog/config/router.ex",
+      "lib/photo_blog/router.ex",
       "lib/photo_blog/supervisor.ex",
       "mix.exs",
       "test",
@@ -33,7 +33,7 @@ defmodule Mix.Tasks.Phoenix.NewTest do
     path = Path.join(project_path, "lib/photo_blog.ex")
     {:ok, content} = File.read(path)
 
-    assert Regex.match?(%r/PhotoBlog/, content)
+    assert Regex.match?(~r/PhotoBlog/, content)
   end
 
   teardown_all do
