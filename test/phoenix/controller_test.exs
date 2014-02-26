@@ -15,7 +15,7 @@ defmodule Phoenix.Router.ControllerTest do
   defmodule Controllers.Page do
     use Phoenix.Controller
 
-    @user_haml %s{
+    @user_haml ~s{
       %section.container
         %article
           %h1= title
@@ -32,10 +32,10 @@ defmodule Phoenix.Router.ControllerTest do
 
   defmodule Router do
     use Phoenix.Router
-    get "users/not_found_301", RedirController, :redir_301
-    get "users/not_found_302", RedirController, :redir_302
+    get "/users/not_found_301", RedirController, :redir_301
+    get "/users/not_found_302", RedirController, :redir_302
 
-    get "page", Controllers.Page, :show
+    get "/page", Controllers.Page, :show
   end
 
   test "redirect without status performs 302 redirect do url" do
@@ -49,9 +49,9 @@ defmodule Phoenix.Router.ControllerTest do
   end
 
   test "controller renders haml" do
-    {:ok, conn} = simulate_request(Router, :get, "page")
+    conn = simulate_request(Router, :get, "page")
     assert conn.status == 200
-    assert conn.resp_body == "<section class=\"container\"></section><article></article><h1>Phoenix</h1><h2>An Elixir Web Framework</h2><div id=\"main\" class=\"content\">This was rendered by Calliope</div>"
+    assert "<section class=\"container\"></section><article></article><h1>Phoenix</h1><h2>An Elixir Web Framework</h2><div id=\"main\" class=\"content\">This was rendered by Calliope</div>" == conn.resp_body
   end
 
 end
