@@ -11,7 +11,7 @@ defmodule Phoenix.Router.ScopedRoutingTest do
 
   defmodule Controllers.Api.V1.Users do
     use Phoenix.Controller
-    def show(conn), do: text(conn, "api users show")
+    def show(conn), do: text(conn, "api v1 users show")
   end
 
   defmodule Controllers.Events do
@@ -33,12 +33,12 @@ defmodule Phoenix.Router.ScopedRoutingTest do
   defmodule Router do
     use Phoenix.Router
     scope path: "admin" do
-      get "users/:id", Controllers.Users, :show, as: :user
+      get "/users/:id", Controllers.Users, :show, as: :user
     end
 
     scope path: "api" do
       scope path: "v1" do
-        get "users/:id", Controllers.Api.V1.Users, :show, as: :api_user
+        get "/users/:id", Controllers.Api.V1.Users, :show, as: :api_user
       end
     end
 
@@ -58,6 +58,10 @@ defmodule Phoenix.Router.ScopedRoutingTest do
           resources "images", Controllers.Api.V1.Images, only: [:edit]
         end
       end
+    end
+
+    scope path: "staff", alias: Staff, helper: "staff" do
+      resources "products", Products
     end
   end
 
@@ -110,11 +114,6 @@ defmodule Phoenix.Router.ScopedRoutingTest do
     def show(conn), do: text(conn, "admin users show")
   end
 
-  defmodule Controllers.Api.V1.Users do
-    use Phoenix.Controller
-    def show(conn), do: text(conn, "api v1 users show")
-  end
-
   defmodule Controllers.Api.V1.Accounts do
     use Phoenix.Controller
     def show(conn), do: text(conn, "api v1 accounts show")
@@ -129,12 +128,12 @@ defmodule Phoenix.Router.ScopedRoutingTest do
     use Phoenix.Router
 
     scope path: "admin", alias: Controllers.Admin do
-      get "users/:id", Users, :show, as: :user
+      get "/users/:id", Users, :show, as: :user
     end
 
     scope path: "api", alias: Controllers.Api do
       scope path: "v1", alias: V1 do
-        get "users/:id", Users, :show, as: :api_v2_user
+        get "/users/:id", Users, :show, as: :api_v2_user
         resources "accounts", Accounts do
           resources "subscriptions", Subscriptions
         end
@@ -164,7 +163,7 @@ defmodule Phoenix.Router.ScopedRoutingTest do
     assert conn.params["id"] == "13"
   end
 
-  test "double scope nasted resources alias" do
+  test "double scope nested resources alias" do
     conn = simulate_request(RouterControllerScoping, :get, "/api/v1/accounts/13/subscriptions/15")
     assert conn.status == 200
     assert conn.resp_body == "api v1 accounts subscriptions show"
@@ -178,12 +177,12 @@ defmodule Phoenix.Router.ScopedRoutingTest do
     use Phoenix.Router
 
     scope path: "admin", alias: Controllers.Admin , helper: "admin" do
-      get "users/:id", Users, :show, as: :user
+      get "/users/:id", Users, :show, as: :user
     end
 
     scope path: "api", alias: Controllers.Api, helper: "api" do
       scope path: "v1", alias: V1, helper: "v1" do
-        get "users/:id", Users, :show, as: :api_v2_user
+        get "/users/:id", Users, :show, as: :api_v2_user
         resources "accounts", Accounts do
           resources "subscriptions", Subscriptions
         end
@@ -200,4 +199,8 @@ defmodule Phoenix.Router.ScopedRoutingTest do
       "/api/v1/accounts/12/subscriptions/88"
   end
 
+  test "resources actions should prefix scoped helper path" do
+    assert Router.edit_staff_product_path(id: 1) == "/staff/products/1/edit"
+    assert Router.new_staff_product_path == "/staff/products/new"
+  end
 end
