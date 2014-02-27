@@ -1,11 +1,11 @@
 defmodule Phoenix.Controller do
   import Plug.Connection
-  import Calliope.Render
+  use Calliope.Render
 
   defmacro __using__(_options) do
     quote do
       import Plug.Connection
-      import Calliope.Render
+      use Calliope.Render
       import unquote(__MODULE__)
     end
   end
