@@ -9,7 +9,7 @@ defmodule Phoenix.Router.Options do
   end
 
   defp map_config([]), do: []
-  defp map_config([{k, v}|t]), do: [option(k,v)] ++ map_config(t)
+  defp map_config([{k, v}|t]), do: [option(k,v) | map_config(t)]
 
   defp option(:port, val), do: { :port, convert(:int, val) }
   defp option(key, val), do: { key, val }
